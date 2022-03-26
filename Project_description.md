@@ -71,6 +71,6 @@ Items:
 	- [ ] Login
 	- [ ] Logout
 - [ ] Data management
-	- [ ] Create a user(non authenticated)
-	- [ ] Create tables for all entities
+	- [x] Create a user(non authenticated)
+	- [x] Create tables for all entities
 	- [ ] Seed the database (cu faker)
