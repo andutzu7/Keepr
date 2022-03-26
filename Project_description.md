@@ -63,7 +63,7 @@ Items:
 - user_id(int)
 - title(VARCHAR2)
 - Description(text)
-- time_frame(date)
+- due_date(date)
 
 ## To do list
 - [ ] Auth
