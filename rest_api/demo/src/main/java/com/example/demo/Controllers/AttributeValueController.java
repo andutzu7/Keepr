@@ -8,9 +8,11 @@ import com.example.demo.Exceptions.AttributeValueNotFoundException;
 import com.example.demo.Exceptions.ItemNotFoundException;
 import com.example.demo.Repositories.AttributeValuesRepository;
 import com.example.demo.Repositories.ItemsRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.web.bind.annotation.*;
+import com.example.demo.Services.AttributeValueService;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -22,42 +24,28 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 public
 class AttributeValueController {
 
-    private final AttributeValuesRepository repository;
-
-    private final AttributeValueModelAssembler assembler;
-
-   AttributeValueController(AttributeValuesRepository repository, AttributeValueModelAssembler assembler) {
-        this.repository = repository;
-        this.assembler = assembler;
-    }
+    @Autowired
+    AttributeValueService attributeValueService;
 
 
 
     @GetMapping("/attribute_values")
     public CollectionModel<EntityModel<AttributeValue>> all() {
-        List<EntityModel<AttributeValue>> attributeValue = repository.findAll().stream() //
-                .map(assembler::toModel) //
-                .collect(Collectors.toList());
-
-        return CollectionModel.of(attributeValue, linkTo(methodOn(AttributeValueController.class).all()).withSelfRel());
+        return attributeValueService.all();
     }
 
     @PostMapping("/attribute_values")
     AttributeValue insertNewAttributeValue(@RequestBody AttributeValue newAttributeValue) {
-        return repository.save(newAttributeValue);
+        return attributeValueService.insertNewAttributeValue(newAttributeValue);
     }
 
-    // Single AttributeValue
 
     @GetMapping("/attribute_values/{id}")
     public EntityModel<AttributeValue> one(@PathVariable Integer id) {
-
-        AttributeValue attributeValue= repository.findById(id) //
-                .orElseThrow(() -> new AttributeValueNotFoundException(id));
-        return assembler.toModel(attributeValue);
+        return attributeValueService.one(id);
     }
     @DeleteMapping("/attribute_values/{id}")
     void deleteAttributeValue(@PathVariable Integer id) {
-        repository.deleteById(id);
+        attributeValueService.deleteAttributeValue(id);
     }
 }

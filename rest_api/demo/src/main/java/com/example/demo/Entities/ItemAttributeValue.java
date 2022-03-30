@@ -4,15 +4,15 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity // This tells Hibernate to make a table out of this class
-@Table(name="item_attribute_value")
+@Table(name="item_attribute_values")
 public class ItemAttributeValue {
     @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     private Integer item_id;
 
-    private String value;
+    private Integer attribute_value_id;
 
     public ItemAttributeValue() {
     }
@@ -33,18 +33,18 @@ public class ItemAttributeValue {
         this.item_id = item_id;
     }
 
-    public String getValue() {
-        return value;
+    public Integer getAttribute_value_id() {
+        return attribute_value_id;
     }
 
-    public void setValue(String value) {
-        this.value = value;
+    public void setAttribute_value_id(Integer attribute_value_id) {
+        this.attribute_value_id = attribute_value_id;
     }
 
-    public ItemAttributeValue(Integer id, Integer item_id, String value) {
+    public ItemAttributeValue(Integer id, Integer item_id, Integer attribute_value_id) {
         this.id = id;
         this.item_id = item_id;
-        this.value = value;
+        this.attribute_value_id = attribute_value_id;
     }
 
     public ItemAttributeValue(Integer id, Integer item_id) {
@@ -57,3 +57,4 @@ public class ItemAttributeValue {
     }
 
 }
+

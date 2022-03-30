@@ -8,6 +8,8 @@ import com.example.demo.Exceptions.ItemNotFoundException;
 import com.example.demo.Exceptions.UserNotFoundException;
 import com.example.demo.Repositories.ItemsRepository;
 import com.example.demo.Repositories.UsersRepository;
+import com.example.demo.Services.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.web.bind.annotation.*;
@@ -22,29 +24,17 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 public
 class UserController {
 
-    private final UsersRepository repository;
-
-    private final UserModelAssembler assembler;
-
-   UserController(UsersRepository repository, UserModelAssembler assembler) {
-        this.repository = repository;
-        this.assembler = assembler;
-    }
-
-
+    @Autowired
+    UserService userService;
 
     @GetMapping("/users")
     public CollectionModel<EntityModel<User>> all() {
-        List<EntityModel<User>> user = repository.findAll().stream() //
-                .map(assembler::toModel) //
-                .collect(Collectors.toList());
-
-        return CollectionModel.of(user, linkTo(methodOn(UserController.class).all()).withSelfRel());
+        return userService.all();
     }
 
     @PostMapping("/users")
     User insertNewUser(@RequestBody User newUser) {
-        return repository.save(newUser);
+        return userService.insertNewUser(newUser);
     }
 
     // Single User
@@ -52,14 +42,12 @@ class UserController {
     @GetMapping("/users/{id}")
     public EntityModel<User> one(@PathVariable Integer id) {
 
-        User user = repository.findById(id) //
-                .orElseThrow(() -> new UserNotFoundException(id));
-        return assembler.toModel(user);
+        return userService.one(id);
     }
 
 
     @DeleteMapping("/users/{id}")
-    void deleteUsers(@PathVariable Integer id) {
-        repository.deleteById(id);
+    void deleteUser(@PathVariable Integer id) {
+        userService.deleteUser(id);
     }
 }

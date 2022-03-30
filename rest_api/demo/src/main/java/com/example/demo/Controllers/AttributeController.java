@@ -7,6 +7,8 @@ import com.example.demo.Entities.Item;
 import com.example.demo.Exceptions.ItemNotFoundException;
 import com.example.demo.Repositories.AttributesRepository;
 import com.example.demo.Repositories.ItemsRepository;
+import com.example.demo.Services.AttributeService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.web.bind.annotation.*;
@@ -21,44 +23,30 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 public
 class AttributeController {
 
-    private final AttributesRepository repository;
-
-    private final AttributeModelAssembler assembler;
-
-   AttributeController(AttributesRepository repository, AttributeModelAssembler assembler) {
-        this.repository = repository;
-        this.assembler = assembler;
-    }
-
-
+    @Autowired
+    AttributeService attributeService;
 
     @GetMapping("/attributes")
     public CollectionModel<EntityModel<Attribute>> all() {
-        List<EntityModel<Attribute>> attributes= repository.findAll().stream() //
-                .map(assembler::toModel) //
-                .collect(Collectors.toList());
 
-        return CollectionModel.of(attributes, linkTo(methodOn(AttributeController.class).all()).withSelfRel());
+        return attributeService.all();
     }
 
     @PostMapping("/attributes")
     Attribute insertNewAttribute(@RequestBody Attribute newAttribute) {
-        return repository.save(newAttribute);
+        return attributeService.insertNewAttribute(newAttribute);
     }
 
     // Single item
 
     @GetMapping("/attributes/{id}")
     public EntityModel<Attribute> one(@PathVariable Integer id) {
-
-        Attribute attribute = repository.findById(id) //
-                .orElseThrow(() -> new ItemNotFoundException(id));
-        return assembler.toModel(attribute);
+        return attributeService.one(id);
     }
 
 
     @DeleteMapping("/attributes/{id}")
-    void deleteItem(@PathVariable Integer id) {
-        repository.deleteById(id);
+    void deleteAttribute(@PathVariable Integer id) {
+        attributeService.deleteAttribute(id);
     }
 }
