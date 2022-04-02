@@ -28,7 +28,6 @@ class AttributeValueController {
     AttributeValueService attributeValueService;
 
 
-
     @GetMapping("/attribute_values")
     public CollectionModel<EntityModel<AttributeValue>> all() {
         return attributeValueService.all();

@@ -32,7 +32,6 @@ public class ItemAttributeValueService{
     }
 
 
-    @GetMapping("/item_attribute_values")
     public CollectionModel<EntityModel<ItemAttributeValue>> all() {
         List<EntityModel<ItemAttributeValue>> itemAttributeValue = repository.findAll().stream() //
                 .map(assembler::toModel) //
@@ -41,14 +40,12 @@ public class ItemAttributeValueService{
         return CollectionModel.of(itemAttributeValue, linkTo(methodOn(ItemAttributeValueController.class).all()).withSelfRel());
     }
 
-    @PostMapping("/item_attribute_values")
     public ItemAttributeValue insertNewItemAttributeValue(@RequestBody ItemAttributeValue newItemAttributeValue) {
         return repository.save(newItemAttributeValue);
     }
 
     // Single ItemAttributeValue
 
-    @GetMapping("/item_attribute_values/{id}")
     public EntityModel<ItemAttributeValue> one(@PathVariable Integer id) {
 
         ItemAttributeValue itemAttributeValue = repository.findById(id) //
@@ -56,7 +53,6 @@ public class ItemAttributeValueService{
         return assembler.toModel(itemAttributeValue);
     }
 
-    @DeleteMapping("/items_attribute_values/{id}")
     public void deleteItemAttributeValue(@PathVariable Integer id) {
         repository.deleteById(id);
     }

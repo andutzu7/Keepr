@@ -48,7 +48,7 @@ public class Item {
     }
 
     public void setId(Integer id) {
-        this.id = id;
+        this.id= id;
     }
 
     public Integer getUser_id() {

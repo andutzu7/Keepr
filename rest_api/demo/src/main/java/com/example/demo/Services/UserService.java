@@ -31,7 +31,6 @@ public class UserService{
     }
 
 
-    @GetMapping("/users")
     public CollectionModel<EntityModel<User>> all() {
         List<EntityModel<User>> user = repository.findAll().stream() //
                 .map(assembler::toModel) //
@@ -40,14 +39,12 @@ public class UserService{
         return CollectionModel.of(user, linkTo(methodOn(UserController.class).all()).withSelfRel());
     }
 
-    @PostMapping("/users")
     public User insertNewUser(@RequestBody User newUser) {
         return repository.save(newUser);
     }
 
     // Single User
 
-    @GetMapping("/users/{id}")
     public EntityModel<User> one(@PathVariable Integer id) {
 
         User user = repository.findById(id) //
@@ -56,7 +53,6 @@ public class UserService{
     }
 
 
-    @DeleteMapping("/users/{id}")
     public void deleteUser(@PathVariable Integer id) {
         repository.deleteById(id);
     }

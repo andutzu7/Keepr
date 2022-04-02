@@ -32,7 +32,6 @@ public class ItemService{
     }
 
 
-    @GetMapping("/items")
     public CollectionModel<EntityModel<Item>> all() {
         List<EntityModel<Item>> item = repository.findAll().stream() //
                 .map(assembler::toModel) //
@@ -41,14 +40,12 @@ public class ItemService{
         return CollectionModel.of(item, linkTo(methodOn(ItemController.class).all()).withSelfRel());
     }
 
-    @PostMapping("/items")
     public Item insertNewItem(@RequestBody Item newItem) {
         return repository.save(newItem);
     }
 
     // Single item
 
-    @GetMapping("/items/{id}")
     public EntityModel<Item> one(@PathVariable Integer id) {
 
         Item item = repository.findById(id) //
@@ -60,8 +57,8 @@ public class ItemService{
 //    Item replaceItem(@RequestBody Item newItem, @PathVariable Integer id) {
 //
 //        return repository.findById(id)
-//                .map(employee -> {
-//                    employee.setName(newItem.getName());
+//                .map(newItem -> {
+//                    .setName(newItem.getName());
 //                    employee.setRole(newItem.getRole());
 //                    return repository.save(employee);
 //                })
@@ -71,7 +68,6 @@ public class ItemService{
 //                });
 //    }
 
-    @DeleteMapping("/items/{id}")
     public void deleteItem(@PathVariable Integer id) {
         repository.deleteById(id);
     }
