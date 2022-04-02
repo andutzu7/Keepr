@@ -29,13 +29,18 @@ export default {
 	},
 	handle_delete:function(index){
 		let item_link = this.items[index]._links.self.href;
-		axios.delete(item_link).then((result)=>{
-			alert(JSON.stringify(result))
+		axios.delete(item_link).then(()=>{
+			this.items.splice(index,1)
 		})
 	},
 
 	handle_post:function(){
-		alert(this.text)
+		let fields = {"user_id": 1,"title": this.text}
+		axios.post('http://localhost:8080/items',fields).then((result)=>{
+		let newItem = result.data;
+		this.items.push(newItem);
+		this.text='';
+		})
 	}
 	},
   data: function(){
