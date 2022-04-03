@@ -8,6 +8,8 @@ import com.example.demo.Repositories.ItemsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.IanaLinkRelations;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 
@@ -53,20 +55,27 @@ public class ItemService{
         return assembler.toModel(item);
     }
 
-//    @PutMapping("/item/{id}")
-//    Item replaceItem(@RequestBody Item newItem, @PathVariable Integer id) {
-//
-//        return repository.findById(id)
-//                .map(newItem -> {
-//                    .setName(newItem.getName());
-//                    employee.setRole(newItem.getRole());
-//                    return repository.save(employee);
-//                })
-//                .orElseGet(() -> {
-//                    newEmployee.setId(id);
-//                    return repository.save(newEmployee);
-//                });
-//    }
+    public ResponseEntity<?> replaceItem(@RequestBody Item newItem, @PathVariable Integer id) {
+
+        Item updatedItem = repository.findById(id) //
+                .map(item -> {
+                    item.setUser_id(newItem.getUser_id());
+                    item.setTitle(newItem.getTitle());
+                    item.setDescription(newItem.getDescription());
+                    item.setDue_date(newItem.getDue_date());
+                    return repository.save(item);
+                }) //
+                .orElseGet(() -> {
+                    newItem.setId(id);
+                    return repository.save(newItem);
+                });
+
+        EntityModel<Item> entityModel = assembler.toModel(updatedItem);
+
+        return ResponseEntity //
+                .created(entityModel.getRequiredLink(IanaLinkRelations.SELF).toUri()) //
+                .body(entityModel);
+    }
 
     public void deleteItem(@PathVariable Integer id) {
         repository.deleteById(id);

@@ -12,6 +12,7 @@ import com.example.demo.Services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -45,6 +46,7 @@ class UserController {
         return userService.one(id);
     }
 
+    // NO PUT IMPLEMENTED
 
     @DeleteMapping("/users/{id}")
     void deleteUser(@PathVariable Integer id) {

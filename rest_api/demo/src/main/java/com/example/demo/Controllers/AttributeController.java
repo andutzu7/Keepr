@@ -11,6 +11,7 @@ import com.example.demo.Services.AttributeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -44,6 +45,11 @@ class AttributeController {
         return attributeService.one(id);
     }
 
+
+    @PutMapping("/attributes/{id}")
+    ResponseEntity<?> replaceItem(@RequestBody Attribute newAttribute, @PathVariable Integer id) {
+        return attributeService.replaceAttribute(newAttribute,id);
+    }
 
     @DeleteMapping("/attributes/{id}")
     void deleteAttribute(@PathVariable Integer id) {

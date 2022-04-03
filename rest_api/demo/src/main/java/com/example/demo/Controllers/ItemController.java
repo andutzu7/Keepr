@@ -11,12 +11,8 @@ import com.example.demo.Services.ItemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
@@ -38,28 +34,16 @@ class ItemController {
         return itemService.insertNewItem(newItem);
     }
 
-    // Single item
-
     @GetMapping("/items/{id}")
     public EntityModel<Item> one(@PathVariable Integer id) {
 
         return itemService.one(id);
     }
 
-//    @PutMapping("/item/{id}")
-//    Item replaceItem(@RequestBody Item newItem, @PathVariable Integer id) {
-//
-//        return repository.findById(id)
-//                .map(employee -> {
-//                    employee.setName(newItem.getName());
-//                    employee.setRole(newItem.getRole());
-//                    return repository.save(employee);
-//                })
-//                .orElseGet(() -> {
-//                    newEmployee.setId(id);
-//                    return repository.save(newEmployee);
-//                });
-//    }
+    @PutMapping("/items/{id}")
+    ResponseEntity<?> replaceItem(@RequestBody Item newItem, @PathVariable Integer id) {
+        return itemService.replaceItem(newItem,id);
+    }
 
     @DeleteMapping("/items/{id}")
     void deleteItem(@PathVariable Integer id) {

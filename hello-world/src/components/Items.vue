@@ -55,7 +55,7 @@ export default{
 	},
 	methods:{
 		async addNewNote(){
-			const {status,data} = await httpClient.post(('items'),{"title":Date.now()});
+			const {status,data} = await httpClient.post(('items'),{});
 			if (status==200){
 				this.notes.unshift(data);
 			}

@@ -11,6 +11,7 @@ import com.example.demo.Repositories.ItemsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.example.demo.Services.AttributeValueService;
 
@@ -39,6 +40,10 @@ class AttributeValueController {
     }
 
 
+    @PutMapping("/attribute_values/{id}")
+    ResponseEntity<?> replaceItem(@RequestBody AttributeValue newAttributeValue, @PathVariable Integer id) {
+        return attributeValueService.replaceAttributeValue(newAttributeValue,id);
+    }
     @GetMapping("/attribute_values/{id}")
     public EntityModel<AttributeValue> one(@PathVariable Integer id) {
         return attributeValueService.one(id);

@@ -12,6 +12,7 @@ import com.example.demo.Services.ItemAttributeValueService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -46,6 +47,10 @@ class ItemAttributeValueController {
         return itemAttributeValueService.one(id);
     }
 
+    @PutMapping("/items_attribute_values/{id}")
+    ResponseEntity<?> replaceItemAttributeValues(@RequestBody ItemAttributeValue newItemAttributeValue, @PathVariable Integer id) {
+        return itemAttributeValueService.replaceItemAttributeValue(newItemAttributeValue,id);
+    }
     @DeleteMapping("/items_attribute_values/{id}")
     void deleteItemAttributeValue(@PathVariable Integer id) {
         itemAttributeValueService.deleteItemAttributeValue(id);

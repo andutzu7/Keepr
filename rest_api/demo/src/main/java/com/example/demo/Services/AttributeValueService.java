@@ -4,12 +4,15 @@ import com.example.demo.Assemblers.AttributeModelAssembler;
 import com.example.demo.Assemblers.AttributeValueModelAssembler;
 import com.example.demo.Controllers.AttributeValueController;
 import com.example.demo.Entities.AttributeValue;
+import com.example.demo.Entities.Item;
 import com.example.demo.Exceptions.AttributeValueNotFoundException;
 import com.example.demo.Repositories.AttributeValuesRepository;
 import com.example.demo.Repositories.AttributesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.IanaLinkRelations;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 
@@ -46,6 +49,25 @@ public class AttributeValueService {
         return repository.save(newAttributeValue);
     }
 
+    public ResponseEntity<?> replaceAttributeValue(@RequestBody AttributeValue newAttributeValue, @PathVariable Integer id) {
+
+        AttributeValue updatedAttributeValue = repository.findById(id) //
+                .map(attributeValue -> {
+                    attributeValue.setAttribute_id(newAttributeValue.getAttribute_id());
+                    attributeValue.setValue(attributeValue.getValue());
+                    return repository.save(attributeValue);
+                }) //
+                .orElseGet(() -> {
+                    newAttributeValue.setId(id);
+                    return repository.save(newAttributeValue);
+                });
+
+        EntityModel<AttributeValue> entityModel = assembler.toModel(updatedAttributeValue);
+
+        return ResponseEntity //
+                .created(entityModel.getRequiredLink(IanaLinkRelations.SELF).toUri()) //
+                .body(entityModel);
+    }
 // Single AttributeValue
 
     public EntityModel<AttributeValue> one(@PathVariable Integer id) {
