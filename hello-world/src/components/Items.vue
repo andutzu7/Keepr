@@ -13,8 +13,8 @@
 <script>
 import AddNewButton from "./AddNewItem.vue";
 import Note from "./Item.vue";
-import axios from 'axios';
 import httpClient from "../services/httpService.js"
+import axios from 'axios';
 /*
 	functional:function(){
 		axios.get(default_routes["items"]).then((result)=>{
@@ -55,20 +55,34 @@ export default{
 	},
 	methods:{
 		async addNewNote(){
-			const {status,data} = await httpClient.post(('items'),{});
+			const {status,data} = await httpClient.post(('items'),{"title":Date.now()});
 			if (status==200){
 				this.notes.unshift(data);
 			}
 
 		},
 		async deleteNote(note){
-			// spring boot hides iteam id's by default
-			let index = this.notes.indexOf(note);
-			let item_link = this.notes[index]._links.self.href;
-			const response= await axios.delete(item_link);
-			console.log(response)
-			if (response.status==200){
-				this.notes.splice(index,1)
+			// Fix because spring boot hides id's by default
+			if(note.id)
+			{
+				const request = await httpClient.delete((`items/${note.id}`));
+				if (request.status==200){
+					// Really ugly Fix
+					const {status,data} = await httpClient.get('items');
+
+					if (status==200){
+						this.notes = data._embedded.items;
+						this.notes.reverse();
+					}
+				}
+			}
+			else{
+				let index = this.notes.indexOf(note);
+				let item_link = this.notes[index]._links.self.href;
+				const response = await axios.delete(item_link);
+				if(response.status===200){
+					this.notes.splice(index,1)
+				}
 			}
 
 		},
@@ -82,8 +96,8 @@ export default{
 
 		const {status,data} = await httpClient.get('items');
 		if (status==200){
-			console.log(data)
 			this.notes = data._embedded.items;
+			this.notes.reverse();
 		}
 	}
 }
