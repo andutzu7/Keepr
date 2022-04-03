@@ -1,22 +1,58 @@
 <template>
-	<div class="tc-note">
+	<div class="tc-note" >
 		<div class="tc-note-header">
-			<span class="tc-note-close">
-				<i class="fas fa-times"></i>
+			<span @click="deleteNote" class="tc-note-close">
+				X
 			</span>
 		</div>
-		<div class="tc-note-title" contenteditable="">
-			{{title}}
+		<div class="tc-note-title" contenteditable="" @blur="titleChange">
+			{{note.title}}
 		</div>
-		<div class="tc-note-body" contenteditable="">
-			{{body}}
+		<div class="tc-note-body" contenteditable="" @blur="bodyChange">
+			{{note.body}}
 		</div>
+	</div>
+	<div>
+
 	</div>
 </template>
 
 <script>
 export default{
-	name:"NoteItem"
+	name:"NoteItem",
+	props:{
+		note:{
+			type:Object,
+			required:true
+		},
+		index:{
+			required:true
+		}
+	},
+	methods:{
+		deleteNote(){
+			this.$emit('deleteNote',this.note)
+		},
+		titleChange($event){
+			let change = {"index":this.index,
+				"key":"title",
+				"newValue":$event.target.innerText}
+			this.$emit('noteUpdate',change)
+		},
+		bodyChange($event){
+			let change = {"index":this.index,
+				"key":"body",
+				"newValue":$event.target.innerText}
+			this.$emit('noteUpdate',change)
+		},
+
+	},
+	data:function(){
+		return {
+			fields:{},
+			edit:false
+		};
+	}
 }
 </script>
 

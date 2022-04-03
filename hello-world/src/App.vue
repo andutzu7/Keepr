@@ -17,52 +17,23 @@
 	</template>
 
 <script>
-import axios from "axios"
+//import axios from "axios"
 import Notes from './components/Items.vue';
-
+/*
 let default_routes={
 	"items":"http://localhost:8080/items",
 	"users":'http://localhost:8080/users',
 	"attributes":'http://localhost:8080/attributes',
 	"attribute_values":'http://localhost:8080/attributeValues',
 	"item_attribute_values":'http://localhost:8080/itemAttributeValues'
-};
+};*/
 export default {
 	name: 'App',
 	components: {Notes},
-	methods:{
-		functional:function(){
-			axios.get(default_routes["items"]).then((result)=>{
-				this.items = result.data._embedded.items;
-				console.log(result.data)
-
-			})
-		},
-		handle_delete:function(index){
-			let item_link = this.items[index]._links.self.href;
-			axios.delete(item_link).then(()=>{
-				this.items.splice(index,1)
-			})
-		},
-
-		handle_post:function(){
-			let fields = {"user_id": 1,"title": this.text}
-			axios.post('http://localhost:8080/items',fields).then((result)=>{
-				let newItem = result.data;
-				this.items.push(newItem);
-				this.text='';
-			})
-		}
-	},
-	data: function(){
-		return {
-			items:[],
-			text:'',
-		}
-	},
+	/*
 	mounted: function(){
 		this.functional();
-	}
+	}*/
 }
 </script>
 

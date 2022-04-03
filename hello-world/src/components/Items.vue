@@ -1,9 +1,9 @@
 <template>
 	<div class="tc-notes-wrapper">
 
-		<add-new-button/>
+		<add-new-button @addNewNote="addNewNote"/>
 			<div class="tc-notes">
-				<note v-for="(note,index) in notes" :key="index"/>
+				<note emits="" v-for="(note,index) in notes" :key="index" :index="index" :note="note" @deleteNote="deleteNote" @noteUpdate="noteUpdate"/>
 			</div>
 
 
@@ -13,7 +13,36 @@
 <script>
 import AddNewButton from "./AddNewItem.vue";
 import Note from "./Item.vue";
+/*
+	functional:function(){
+		axios.get(default_routes["items"]).then((result)=>{
+			this.items = result.data._embedded.items;
+			console.log(result.data)
 
+		})
+	},
+		handle_delete:function(index){
+			let item_link = this.items[index]._links.self.href;
+			axios.delete(item_link).then(()=>{
+			this.items.splice(index,1)
+		})
+	},
+
+	handle_post:function(){
+		let fields = {"user_id": 1,"title": this.text}
+		axios.post('http://localhost:8080/items',fields).then((result)=>{
+			let newItem = result.data;
+			this.items.push(newItem);
+			this.text='';
+		})
+	}
+},
+	data: function(){
+		return {
+			items:[],
+			text:'',
+		}
+	},*/
 export default{
 	name:"NoteItems",
 	components:{Note,AddNewButton},
@@ -21,26 +50,27 @@ export default{
 		return {
 			notes: [
 				{
-					title: 'sunt aut facere repellat',
-					body: 'uia et suscipit suscipit recusandae consequuntur expedita et cum reprehenderit molestiae ut ut quas totam nostrum rerum est autem sunt rem eveniet architecto'
-				},
-				{
 					title: 'qui est esse',
 					body: 'est rerum tempore vitae<br>nsequi sint nihil reprehenderit dolor beatae ea dolores neque <br>fugiat blanditiis voluptate porro vel nihil molestiae ut reiciendis<br>qui aperiam non debitis possimus qui neque nisi nulla'
-				},
-				{
-					title: 'nesciunt quas odio',
-					body: 'repudiandae veniam quaerat sunt sed alias aut fugiat sit autem sed est'
-				},
-				{
-					title: 'This is a demo note',
-					body: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Modi corrupti officiis alias tenetur, tenetur iste maxime laudantium?'
 				},
 				{
 					title: 'qui est esse',
 					body: 'est rerum tempore vitae<br>nsequi sint nihil reprehenderit dolor beatae ea dolores neque <br>fugiat blanditiis voluptate porro vel nihil molestiae ut reiciendis<br>qui aperiam non debitis possimus qui neque nisi nulla'
 				},
 			]
+		}
+	},
+	methods:{
+		addNewNote(){
+			this.notes.unshift({title:'',body:''});
+		},
+		deleteNote(note){
+			this.notes.splice(this.notes.indexOf(note),1);
+		},
+		noteUpdate(changes){
+			let new_note = this.notes[changes["index"]];
+			new_note[changes["key"]]=changes["newValue"];
+			this.notes[changes["index"]]= new_note;
 		}
 	}
 }
