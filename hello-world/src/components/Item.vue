@@ -10,7 +10,7 @@
 				{{note.title}}
 			</div>
 			<div class="tc-note-body" contenteditable="" @blur="bodyChange">
-				{{note.body}}
+				{{note.description}}
 			</div>
 		</div>
 		<div>
@@ -49,12 +49,6 @@ export default{
 			this.$emit('noteUpdate',change)
 		},
 
-	},
-	data:function(){
-		return {
-			fields:{},
-			edit:false
-		};
 	}
 }
 </script>

@@ -13,6 +13,8 @@
 <script>
 import AddNewButton from "./AddNewItem.vue";
 import Note from "./Item.vue";
+import axios from 'axios';
+import httpClient from "../services/httpService.js"
 /*
 	functional:function(){
 		axios.get(default_routes["items"]).then((result)=>{
@@ -48,29 +50,40 @@ export default{
 	components:{Note,AddNewButton},
 	data(){
 		return {
-			notes: [
-				{
-					title: 'qui est esse',
-					body: 'est rerum tempore vitae<br>nsequi sint nihil reprehenderit dolor beatae ea dolores neque <br>fugiat blanditiis voluptate porro vel nihil molestiae ut reiciendis<br>qui aperiam non debitis possimus qui neque nisi nulla'
-				},
-				{
-					title: 'qui est esse',
-					body: 'est rerum tempore vitae<br>nsequi sint nihil reprehenderit dolor beatae ea dolores neque <br>fugiat blanditiis voluptate porro vel nihil molestiae ut reiciendis<br>qui aperiam non debitis possimus qui neque nisi nulla'
-				},
-			]
+			notes: []
 		}
 	},
 	methods:{
-		addNewNote(){
-			this.notes.unshift({title:'',body:''});
+		async addNewNote(){
+			const {status,data} = await httpClient.post(('items'),{});
+			if (status==200){
+				this.notes.unshift(data);
+			}
+
 		},
-		deleteNote(note){
-			this.notes.splice(this.notes.indexOf(note),1);
+		async deleteNote(note){
+			// spring boot hides iteam id's by default
+			let index = this.notes.indexOf(note);
+			let item_link = this.notes[index]._links.self.href;
+			const response= await axios.delete(item_link);
+			console.log(response)
+			if (response.status==200){
+				this.notes.splice(index,1)
+			}
+
 		},
 		noteUpdate(changes){
 			let new_note = this.notes[changes["index"]];
 			new_note[changes["key"]]=changes["newValue"];
 			this.notes[changes["index"]]= new_note;
+		}
+	},
+	async mounted(){
+
+		const {status,data} = await httpClient.get('items');
+		if (status==200){
+			console.log(data)
+			this.notes = data._embedded.items;
 		}
 	}
 }
