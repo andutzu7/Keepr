@@ -1,20 +1,23 @@
 <template>
-	<div class="tc-note" >
-		<div class="tc-note-header">
-			<span @click="deleteNote" class="tc-note-close">
-				X
-			</span>
+	<div class = "item_container">
+		<div class="tc-note" >
+			<div class="tc-note-header">
+				<span @click="deleteNote" class="tc-note-close">
+					X
+				</span>
+			</div>
+			<div class="tc-note-title" contenteditable="" @blur="titleChange">
+				{{note.title}}
+			</div>
+			<div class="tc-note-body" contenteditable="" @blur="bodyChange">
+				{{note.body}}
+			</div>
 		</div>
-		<div class="tc-note-title" contenteditable="" @blur="titleChange">
-			{{note.title}}
-		</div>
-		<div class="tc-note-body" contenteditable="" @blur="bodyChange">
-			{{note.body}}
-		</div>
-	</div>
-	<div>
+		<div>
 
+		</div>
 	</div>
+
 </template>
 
 <script>
