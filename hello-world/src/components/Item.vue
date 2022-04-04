@@ -44,7 +44,7 @@ export default{
 		},
 		bodyChange($event){
 			let change = {"index":this.index,
-				"key":"body",
+				"key":"description",
 				"newValue":$event.target.innerText}
 			this.$emit('noteUpdate',change)
 		},

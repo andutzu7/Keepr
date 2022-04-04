@@ -86,10 +86,16 @@ export default{
 			}
 
 		},
-		noteUpdate(changes){
+		async noteUpdate(changes){
 			let new_note = this.notes[changes["index"]];
+			const item_link = new_note._links.self.href;
 			new_note[changes["key"]]=changes["newValue"];
-			this.notes[changes["index"]]= new_note;
+			const response = await httpClient.put(item_link,new_note);
+			if (response.status==200){
+				this.notes[changes["index"]]= new_note;
+
+			}
+
 		}
 	},
 	async mounted(){
