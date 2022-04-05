@@ -1,5 +1,5 @@
 <template>
-	<button @click="addNewNote" class="new-note-btn">New item</button>
+	<button @click="addNewNote" class="new-note-btn">+</button>
 </template>
 
 <script>
@@ -18,8 +18,7 @@ export default{
 .tc-notes-wrapper {
 
 	.new-note-btn {
-		width: 200px;
-		display: block;
+		width: 100px;
 		margin: 0 auto 20px;
 		background-color: #FFF;
 		padding: 10px 32px;
