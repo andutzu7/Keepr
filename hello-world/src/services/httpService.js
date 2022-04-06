@@ -3,7 +3,7 @@ import axios from 'axios';
 import router from '../router';
 
 let config = {
-	baseURL: 'http://localhost:8080/'
+	baseURL: 'http://keepr.pseudot.xyz'
 };
 
 /*
